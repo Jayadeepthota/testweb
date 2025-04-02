@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relaks Radio Café</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Playfair Display', serif;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        .wrap-main {width:100%;
+        padding:100px 0;
+    margin: 0 auto;
+border: 4px ;}
+
+        /* Logo */
+        .logo-button {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 10; /* Make sure logo stays above other elements */
+}
+
+.logo {
+    width: 120px;/* Adjust to your logo size */
+    height: auto;
+}
+         
+        /* Navigation Buttons Section with Box */
+        .nav-buttons-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%); /* Centering the buttons horizontally */
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            padding: 10px 20px; /* Padding around the box */
+            background-color: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background */
+            border-radius: 25px; /* Rounded corners for the box */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Soft shadow for the box */
+        }
+        .nav-buttons-container {
+    z-index: 10; /* Increase the z-index value to ensure buttons are above other content */
+}
+
+
+        .nav-buttons-container a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4); /* Glowing effect */
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Underline Effect */
+        .nav-buttons-container a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #CDAA7D, #CDAA7D);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease-out;
+        }
+
+        .nav-buttons-container a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .nav-buttons-container.hidden {
+    transform: translateY(-100px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+
+        /* Book Now Button Box */
+        .book-now {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-decoration: none;
+            position: fixed;
+            top: 20px;
+            right: 20px; /* Position at the top-right corner */
+            background-color: #CDAA7D; /* Gold-colored background */
+            padding: 10px 20px; /* Padding to create box around the text */
+            border-radius: 25px; /* Rounded corners for the box */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for the box */
+            transition: all 0.3s ease-in-out;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4); /* Glowing effect */
+        }
+
+        .book-now:hover {
+            text-decoration: none;
+            background-color: #0f0f0f; /* Lighter gold on hover */
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 25px rgba(255, 255, 255, 0.4); /* Glowing effect on hover */
+        }
+        
+        /* Landing Section */
+        .landing {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px; /* Space for logo & buttons */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .landing video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        /* Soft Border Fade Effect at Bottom */
+        .landing::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px; /* Soft fade height */
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 100%);
+            z-index: -1;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .landing-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .landing h1 {
+            font-size: 4rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 255, 0.5); /* Enhanced glow */
+        }
+
+        .landing p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px rgba(255, 255, 255, 0.4); /* Glowing effect */
+        }
+
+        /* Overview Sections */
+        .section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 500;
+            padding: 40px;
+            text-align: left;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 3s, transform 3s ease-out; /* Slower animation */
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-container {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            max-width: 1200px;
+            margin: auto;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 3s, transform 3s ease-out; /* Slower animation */
+        }
+
+        .content-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-container .image-wrapper {
+            position: relative;
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 2s, transform 2s ease-out; /* Slower animation for image */
+        }
+
+        .content-container.visible .image-wrapper {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .content-container img {
+            width: 400px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0px 10px 30px rgba(255, 255, 255, 0.2);
+            transform: rotate(-5deg);
+            transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out; /* Slower transition */
+        }
+
+        .content-container img:hover {
+            transform: rotate(0deg);
+            box-shadow: 10px 20px 60px rgba(255, 255, 255, 0.6); /* Moving shadow on hover */
+        }
+
+        .content-container .reflection {
+            position: absolute;
+            top: 100%; /* Position below the original image */
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('471305201_578170768167767_4509606158124296423_n.jpg'); /* Same image */
+            background-size: cover;
+            background-position: center;
+            transform: rotate(45deg) scaleX(-1); /* Start at a cross position and reverse it */
+            opacity: 0.3; /* Adjust transparency */
+            filter: blur(8px); /* Add blur effect */
+            z-index: -1; /* Ensure the reflection stays behind the original image */
+            border-radius: 20px; /* Smooth rounded corners */
+            transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out, transform 0.5s ease-in-out; /* Slower transition */
+        }
+
+        /* Reflection Soft Fade, Movement & Rotation */
+        .content-container img:hover + .reflection {
+            opacity: 0.5; /* Increase opacity on hover */
+            filter: blur(5px); /* Reduce blur on hover */
+            transform: rotate(0deg) translateY(20px) scaleX(-1); /* Move reflection with image and straighten it */
+        }
+
+        /* Line-by-Line Text Reveal */
+        .content-text p {
+            display: block;
+            margin: 0;
+            opacity: 0;
+            animation: fadeInLine 3s ease-out forwards;
+        }
+
+        /* Delay the appearance of each paragraph */
+        .content-text p:nth-child(1) {
+            animation-delay: 1s;
+        }
+
+        .content-text p:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        .content-text p:nth-child(3) {
+            animation-delay: 3s;
+        }
+
+        @keyframes fadeInLine {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Backgrounds */
+        #radio-cafe {
+            background: url('radio-cafe-background.jpg') no-repeat center center/cover;
+        }
+
+        #karaoke-room {
+            background: url('karaoke-room-background.jpg') no-repeat center center/cover;
+        }
+
+        #karak-chai {
+            background: url('karak-chai-background.jpg') no-repeat center center/cover;
+        }
+
+        #private-room {
+            background: url('private-room-background.jpg') no-repeat center center/cover;
+        }
+        #backToTopBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: silver;
+    color: black;
+    font-size: 24px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+#backToTopBtn:hover {
+    background-color: black;
+    color: white;
+}
+
+
+    </style>
+    <style>
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            /* Adjusting logo size for smaller screens */
+            .logo {
+                width: 80px;
+            }
+    
+           /* Navigation Buttons Section with Box */
+.nav-buttons-container {
+    position: fixed;
+    top: 15px; /* Adjust the vertical placement */
+    left: 47%;
+    transform: translateX(-50%); /* Centering the buttons horizontally */
+    display: flex;
+    justify-content: center; /* Ensure buttons are horizontally aligned */
+    gap: 5px; /* Smaller gap between the buttons */
+    align-items: center;
+    padding: 4px 8px; /* Reduced padding */
+    background-color: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background */
+    border-radius: 15px; /* Rounded corners for the box */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Soft shadow for the box */
+    z-index: 10; /* Ensure buttons are above other content */
+    flex-wrap: nowrap; /* Prevents the buttons from wrapping to the next line */
+}
+
+.nav-buttons-container a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem; /* Smaller font size */
+    font-weight: 500;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 5px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4); /* Glowing effect */
+    transition: all 0.3s ease-in-out;
+}
+
+
+/* Underline Effect */
+.nav-buttons-container a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #CDAA7D, #CDAA7D);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-out;
+}
+
+.nav-buttons-container a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+    
+            /* Book Now Button */
+            .book-now {
+                font-size: 1rem; /* Adjust button text size for mobile */
+                padding: 1px 3px; /* Adjust padding for better clickability */
+                right: 50px; /* Adjust button position */
+            }
+    
+            /* Adjust Landing Section for mobile */
+            .landing h1 {
+                font-size: 2.5rem; /* Adjust title size */
+                text-shadow: none; /* Remove glow effect for smaller screens */
+            }
+    
+            .landing p {
+                font-size: 1.2rem; /* Smaller font size for description */
+            }
+    
+            /* Mobile-specific styling for the content container */
+            .content-container {
+                flex-direction: column; /* Stack content vertically */
+                gap: 30px; /* Space out the elements */
+            }
+    
+            .content-container img {
+                width: 90%; /* Make images responsive */
+                max-width: 300px; /* Limit image size */
+            }
+    
+            /* Adjust Section visibility */
+            .section {
+                padding: 20px; /* Reduce padding for mobile */
+            }
+    
+            /* Back to Top Button */
+            #backToTopBtn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+    </style>
+    
+</head>
+<body>
+
+    <!-- Logo -->
+    <a href="index .html" class="logo-button">
+        <img src="Cafe-whitw.png" alt="Relaks Radio Café Logo" class="logo">
+    </a>
+
+    <!-- Navigation Buttons Section -->
+    <div class="nav-buttons-container">
+        <a href="menu.html">Menu</a>
+        <a href="karaoke.html">Karaoke Room</a>
+       
+        <a href="hire us.html">Hire Us</a>
+        <a href="about.html">About Us</a>
+    </div>
+    <button id="backToTopBtn" onclick="scrollToTop()">
+        ↑
+    </button>
+    
+
+    <!-- Book Now Button Box -->
+    <a href="#" class="book-now">Book Now</a>
+
+    <!-- Landing Page Video -->
+    <div class="landing">
+        <video autoplay loop muted playsinline>
+            <source src="relaks cafe-vid (1).mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="landing-content">
+            <h1>Welcome to Relaks Radio Café</h1>
+            <p>Experience the perfect blend of music, food, and relaxation.</p>
+        </div>
+    </div>
+
+
+    <!-- Overview Sections -->
+    <section id="radio-cafe" class="section">
+        <div class="content-container">
+            <div class="content-text">
+                <h2>Relaks Radio Café</h2>
+                <p>Welcome to London's most elegant café, where music, ambiance, and food come together for a unique experience.</p>
+                <p>Indulge in our signature coffee blends and gourmet meals while enjoying live music.</p>
+            </div>
+            <div class="image-wrapper">
+                <img src="471305201_578170768167767_4509606158124296423_n.jpg" alt="Relaks Café Interior">
+                <div class="reflection"></div> <!-- Reflection -->
+            </div>
+        </div>
+    </section>
+
+    
+    <div class="karaoke-section">
+        <img src="microphone-png-19991.png" class="falling-mic" alt="Microphone">
+        <div class="text-overlay">
+            <h1>Let's Sing!</h1>
+            <p>Welcome to the Karaoke Room</p>
+        </div>
+        
+    </div>
+    
+    
+    
+    
+    
+    <style>.karaoke-section {
+        position: relative;
+        width: 100%;
+        height: 100vh; /* Full screen section */
+        background-color: rgba(0, 0, 0, 0);
+        overflow: hidden;
+    }
+    
+    .falling-mic {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 450px; /* Adjust based on your mic image size */
+        height: auto;
+        animation: rotateMic 3s ease forwards;
+        z-index: -1; /* Keeps the mic in the background */
+        transform-origin: bottom left; /* Bottom-left corner stays fixed */
+        animation-play-state: paused; /* Prevent animation from auto-starting */
+    }
+    
+    .text-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 3rem; /* You can adjust the size */
+        font-family: 'Arial', sans-serif;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        z-index: 10; /* Ensures text stays on top of mic */
+    }
+    
+    @keyframes rotateMic {
+        0% {
+            top: 0;
+            left: 0;
+            transform: rotate(0deg); /* Initial state */
+        }
+        
+        100% {
+            transform: rotate(45deg); /* Rotate 180 degrees by the end */
+        }
+    }
+    
+    
+    </style>
+    
+
+  
+    
+   
+
+    <script>
+        // Intersection Observer API for Scroll-triggered Animations
+        const sections = document.querySelectorAll('.section');
+        const contentContainers = document.querySelectorAll('.content-container');
+        const images = document.querySelectorAll('.image-wrapper');
+        const reflections = document.querySelectorAll('.reflection');
+
+        const options = {
+            root: null,
+            threshold: 0.5, // Trigger when 50% of section is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, options);
+
+        sections.forEach(section => observer.observe(section));
+        contentContainers.forEach(container => observer.observe(container));
+        images.forEach(image => observer.observe(image));
+        reflections.forEach(reflection => observer.observe(reflection));
+        document.addEventListener('DOMContentLoaded', () => {
+    // Ensure the content is loaded before applying the observer
+    const karakChaiSection = document.querySelector('.karak-chai-section');
+    
+    if (!karakChaiSection) return; // Check if the section exists
+    
+    // Create an Intersection Observer instance
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // When the section is visible, add the 'visible' class
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Stop observing after it becomes visible
+            }
+        });
+    }, {
+        threshold: 0.5 // Trigger the visibility when 50% of the section is visible
+    });
+    
+    // Observe the Karak Chai section
+    observer.observe(karakChaiSection);
+});
+// Show/hide button on scroll
+window.onscroll = function() {
+    const btn = document.getElementById("backToTopBtn");
+    if (document.documentElement.scrollTop > 300) {
+        btn.style.display = "flex";
+    } else {
+        btn.style.display = "none";
+    }
+};
+
+// Smooth scroll to top
+function scrollToTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+let lastScrollTop = 0;
+const navContainer = document.querySelector('.nav-buttons-container');
+
+window.addEventListener('scroll', () => {
+    let currentScroll = window.scrollY;
+
+    if (currentScroll > lastScrollTop) {
+        // Scrolling Down - Hide Nav Buttons
+        navContainer.classList.add('hidden');
+    } else {
+        // Scrolling Up - Show Nav Buttons
+        navContainer.classList.remove('hidden');
+    }
+
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;  // For mobile bounce effect
+});
+
+        
+    </script>
+</body>
+</html>
